@@ -1,0 +1,59 @@
+\documentclass[a4paper]{article}
+
+\usepackage[parfill]{parskip}
+\usepackage{soul}
+\usepackage{graphicx,subfigure}
+\usepackage{amsmath,amsfonts}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage[T1]{fontenc}
+\usepackage{tcolorbox}
+\usepackage{longtable}
+% \usepackage{floatrow}
+\usepackage{capt-of}
+
+
+\usepackage[left=2cm,right=2cm,top = 1cm, bottom = 1cm]{geometry}
+\newcommand{\BigO}[1]{\ensuremath{\operatorname{O}\left(#1\right)}}
+
+\begin{document}
+	
+\begin{tcolorbox}
+\begin{center}
+\textbf{\large{Analysis}\\ Homework 6: Variational Inference by Rohan Chandra.\\ USING 1 LATE DAY.}
+\end{center}
+\end{tcolorbox}
+
+\textbf{new\_phi: }\\
+In new\_phi, a new value for the variational parameter phi is calculated. This is accomplished by looking at the appropriate column of the Beta matrix for the given word index. The exponential digamma terms are calculated for the sum of over the gamma vectors and for the vector of gammas. The exponential term is calculated as a vector and is element-wise multiplied by the extracted Beta column. Then the normalization term is calculated as the sum of the unscaled phi result divided by the count term to result in the proper scaling result. The phi vector is returned. All computations are done using numpy calls to improve computation speed. \\
+
+\textbf{m\_step: }\\
+In the m\_step function, the new Beta matrix is calculated. In the e\_step function call, topic\_counts is computed based on the final phi computed in the inner loop of the document iteration loop. This set of counts is passed to the m\_step function as an input. Then we know that the Beta columns can be approximated by taking the counts of the phi matrix represented in topic\_counts and for each topic, dividing by the total counts. The comments in the code gives us that each topic is a row, so we simply take the sum over the rows then scale each row by one over that relevant sum. The row sums are taken using a numpy call on the topic\_counts matrix. The scaling is done in a loop. A check is done to prevent divides by zero. The resulting matrix is returned. \\
+
+\textbf{Results: }\\
+\begin{itemize}
+	\item The resulting topics.txt list was generated using the default code settings and running the lda script against the train.dat and voc.dat datasets in ../data/ap.
+	\item  A successful code would generate clear topics with words that clearly belong in that topic and make sense. For example, "Money" topic would have words like bank, dollar, cent, million and so on. "Law" topic would contain words like attorney, judge, prison, trial etc. 
+	\item \textbf{My generated list of topic is successful. Topic 2 clearly matches with Law. Topic 6 clearly matches with Money. And topic 3 somewhat deals with buildings like police station, hospital, schools, etc.}
+
+\end{itemize}
+
+
+\begin{tcolorbox}
+\begin{center}
+\textbf{Extra Credit}
+\end{center}
+\end{tcolorbox}
+\begin{itemize}
+	\item $\alpha$ is the dirichlet parameter.
+	\item By differentiating the ELBO objective function w.r.t $\alpha$,
+
+	\[\mathbb{F} = \dfrac{\partial \mathcal{L}}{\partial \alpha} = \psi(\sum_i \alpha_i) - \psi(\alpha) + \psi(\gamma) - \psi(\sum_i \gamma_i) \]
+
+	\item To compute optimal $\alpha$, we set $\mathbb{F} = 0$. We approximate this by Newton's method.
+	\item At each iteration, we compute:
+	\[\alpha_{new} = \alpha_{old} - \dfrac{\mathbb{F}}{\partial \mathbb{F}/ \partial \alpha}\]
+
+	
+\end{itemize}
+\end{document}
